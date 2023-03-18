@@ -1,4 +1,4 @@
-import { CACHE_MANAGER, CacheModule, Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserResolver } from './user.resolver';
 import { PrismaService } from '../prisma.service';
@@ -6,9 +6,8 @@ import { PasswordUtils } from './utils/password.utils';
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { RedisClientOptions } from 'redis';
-import { redisStore } from 'cache-manager-redis-store';
 import { JwtStrategy } from './jwt/jwt.strategies';
+import { Islogout } from './jwt/islogout';
 
 @Module({
   imports: [
@@ -23,18 +22,6 @@ import { JwtStrategy } from './jwt/jwt.strategies';
         },
       }),
     }),
-    CacheModule.register<RedisClientOptions>({
-      // @ts-ignore
-      store: async () =>
-        await redisStore({
-          // Store-specific configuration:
-          socket: {
-            host: 'localhost',
-            port: 6379,
-          },
-        }),
-      inject: [CACHE_MANAGER],
-    }),
     ConfigModule,
   ],
   providers: [
@@ -43,6 +30,7 @@ import { JwtStrategy } from './jwt/jwt.strategies';
     PrismaService,
     PasswordUtils,
     JwtStrategy,
+    Islogout,
   ],
   exports: [PassportModule, JwtStrategy],
 })

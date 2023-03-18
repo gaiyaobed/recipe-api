@@ -1,0 +1,80 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input CreateRecipeInput {
+  name: String!
+}
+
+input CreateUserInput {
+  """email field (placeholder)"""
+  email: String!
+
+  """name field (placeholder)"""
+  name: String!
+
+  """password field (placeholder)"""
+  password: String!
+}
+
+input LoginUserInput {
+  """email field (placeholder)"""
+  email: String!
+
+  """password field (placeholder)"""
+  password: String!
+}
+
+type Mutation {
+  createRecipe(createRecipeInput: CreateRecipeInput!): Recipe!
+  createUser(createUserInput: CreateUserInput!): User!
+  logOut: User!
+  removeRecipe(id: Int!): Recipe!
+  removeUser(id: Int!): User!
+  updateRecipe(updateRecipeInput: UpdateRecipeInput!): Recipe!
+  updateUser(updateUserInput: UpdateUserInput!): User!
+}
+
+type Query {
+  login(loginUserInput: LoginUserInput!): UserResponse!
+  recipe(id: Int!): Recipe!
+  recipes: [Recipe!]!
+  user(id: Int!): User!
+  users: [User!]!
+}
+
+type Recipe {
+  id: Int!
+  name: String!
+  user: User
+  userId: Int
+}
+
+input UpdateRecipeInput {
+  id: Int!
+  name: String
+}
+
+input UpdateUserInput {
+  """email field (placeholder)"""
+  email: String
+  id: Int!
+
+  """name field (placeholder)"""
+  name: String
+
+  """password field (placeholder)"""
+  password: String
+}
+
+type User {
+  email: String!
+  id: ID!
+  name: String!
+  password: String!
+}
+
+type UserResponse {
+  accessToken: String
+  data: User!
+}

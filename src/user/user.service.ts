@@ -15,6 +15,7 @@ import { LoginUserInput } from './dto/login-user.input';
 import { User, UserResponse } from './entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { Cache } from 'cache-manager';
+import { Islogout } from './jwt/islogout';
 
 @Injectable()
 export class UserService {
@@ -22,7 +23,7 @@ export class UserService {
     private prisma: PrismaService,
     private readonly passwordUtils: PasswordUtils,
     private readonly jwtService: JwtService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
+    private readonly islogout: Islogout,
   ) {}
 
   async create(createUserInput: CreateUserInput): Promise<User> {
@@ -93,14 +94,9 @@ export class UserService {
   }
 
   async logOut(ctx: any): Promise<any> {
-    try {
-      await this.cacheManager.set(
-        'accessToken',
-        ctx.req.headers.authorization.replace('Bearer ', ''),
-      );
-      return ctx.req.user;
-    } catch (e) {
-      throw new InternalServerErrorException(e);
-    }
+    await this.islogout.backlistToken(
+      ctx.req.headers.authorization.replace('Bearer ', ''),
+    );
+    return ctx.req.user;
   }
 }
